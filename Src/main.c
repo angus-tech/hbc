@@ -57,7 +57,22 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void delay_us(uint32_t us)
+{    
+  uint32_t delay = (HAL_RCC_GetHCLKFreq() / 4000000 * us);
+  while (delay--)
+	{
+		;
+	}
+}
 
+void delay_ms(uint32_t ms)
+{    
+   while(ms--)
+   {
+      delay_us(1000); 
+   }
+}
 /* USER CODE END 0 */
 
 /**
@@ -67,7 +82,7 @@ static void MX_USART2_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint8_t table[] = {"hello world!"};
   /* USER CODE END 1 */
   
 
@@ -103,6 +118,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    HAL_UART_Transmit(&huart2, table, sizeof(table), 1000);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+    delay_ms(500);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+    delay_ms(500);
   }
   /* USER CODE END 3 */
 }
